@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react'
+import {useOutletContext} from 'react-router-dom'
 import '../App.css'
 
 function Index() {
   const [backendData, setBackendData] = useState([]);
+  const [setCount] =useOutletContext();
 
   useEffect(()=> {
     const fetchData = async () => {
       try{
-        const response = await fetch('/api');
+        const response = await fetch('/api', {
+          credentials: 'same-origin'
+        });
         const data = await response.json();
-        console.log(data)
         setBackendData(data)
       } catch(error) {
         console.error('Error fetching data:', error);
@@ -20,23 +23,22 @@ function Index() {
 
   return (
     <div>
-      {backendData? (
+      {backendData.username? (
         <div>
-          {backendData.map((data)=>(
-            <p key={data.id}>{data.username}: {data.password}</p>
-          ))}
+          Welcome {backendData.username}!
+          <button> <a href="/api/logout">Log-out</a></button>
         </div>
       ): (
-        <p>Loading...</p>
+        <h1> Please Log-in</h1>
       )}
-      <h1>Log-in</h1>
-      <form method="POST" action="http://localhost:8080/log-in">
+
+      <form method="POST" action="/api/user/log-in">
       <label htmlFor="username">Username:</label>
           <input type="text" id="username" name="username" />
 
           <label htmlFor="password">Password:</label>
           <input type="password" id="password" name="password" />
-          <button>Submit</button>
+          <button onClick ={()=> setCount((prev)=> prev+1)}>Submit</button>
       </form>
     </div>
   )
