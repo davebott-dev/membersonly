@@ -53,12 +53,12 @@ router.use(passport.session());
 
 router.get('/',controller.get);
 router.post('/',controller.insertUser);
-//fix post request for loggin in
 router.post(
-    'http://localhost:5173/log-in',
+    '/user/log-in',
     passport.authenticate("local", {
-        successRedirect: 'http:localhost:5173',
-        failureRedirect: 'http:localhost:5173/sign-up'
+        successRedirect: 'http://localhost:5173/',
+        failureRedirect: 'http://localhost:5173/Sign-up'
     })
 )
+router.get('/logout', controller.logout);
 module.exports = router;

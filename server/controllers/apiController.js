@@ -1,15 +1,36 @@
 const db = require('../models/query');
+const bcrypt = require('bcryptjs');
 
 module.exports = {
     get: async(req,res) => {
         const data= await db.getData();
-        res.json(data);
+        const user = req.user;
+        res.json(user);
     },
-    insertUser: async(req,res) => {
+    insertUser: async(req,res,next) => {
         const username = req.body.username;
         const password = req.body.password;
 
-        await db.insertData(username,password);
-        res.redirect('http://localhost:5173');
+        bcrypt.hash(password,10,async(err,hashedPassword)=> {
+            if(err) {
+                console.log(err);
+            } else {
+                try {
+                    await db.insertData(username,hashedPassword);
+                    res.redirect('http://localhost:5173');
+                } catch(err) {
+                    return next(err);
+                }
+            }
+        })
+       
+    },
+    logout: (req,res,next) => {
+        req.logout((err)=> {
+            if(err){
+                return next(err);
+            }
+            res.redirect('http://localhost:5173');
+        })
     }
 }
