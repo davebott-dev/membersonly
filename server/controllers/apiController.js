@@ -3,7 +3,6 @@ const bcrypt = require('bcryptjs');
 
 module.exports = {
     get: async(req,res) => {
-        const data= await db.getData();
         const user = req.user;
         res.json(user);
     },
@@ -32,5 +31,22 @@ module.exports = {
             }
             res.redirect('http://localhost:5173');
         })
+    },
+    getMessages: async (req,res) => {
+        const data = await db.getMessages();
+        res.json(data);
+    },
+    postMessage: async (req,res) => {
+        const message = req.body.comment;
+        const date = new Date().toLocaleString("en-us", {
+            weekday: "long",
+            month:"short",
+            day:"numeric",
+            year:"numeric",
+            hour12:true,
+        });
+        const userId = req.user.id;
+        await db.insertMessage(message,date,userId);
+        res.redirect('http://localhost:5173');
     }
 }
