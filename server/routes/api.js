@@ -53,6 +53,8 @@ router.use(passport.session());
 
 router.get('/',controller.get);
 router.post('/',controller.insertUser);
+router.get('/messages',controller.getMessages);
+router.post('/messages',controller.postMessage);
 router.post(
     '/user/log-in',
     passport.authenticate("local", {
