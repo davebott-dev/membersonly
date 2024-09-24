@@ -14,6 +14,7 @@ const Root = () => {
 
         <div>
             <Link to ='Sign-up'><button>Sign up</button></Link>
+            <Link to ='Log-in'><button>Log in</button></Link>
             <p>You logged in {count} times</p>
         </div>
         </nav>

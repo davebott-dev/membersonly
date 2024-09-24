@@ -1,45 +1,58 @@
 import { useState, useEffect } from 'react'
-import {useOutletContext} from 'react-router-dom'
 import '../App.css'
 
 function Index() {
-  const [backendData, setBackendData] = useState([]);
-  const [setCount] =useOutletContext();
+  const [userData, setUserData] = useState([]);
+  const [messageData, setMessageData] = useState([]);
+  
+
 
   useEffect(()=> {
     const fetchData = async () => {
       try{
-        const response = await fetch('/api', {
-          credentials: 'same-origin'
-        });
-        const data = await response.json();
-        setBackendData(data)
+        const response2 = await fetch('/api/messages');
+        const data2 = await response2.json();
+        setMessageData(data2);
+        console.log(data2)
+
+        const response1 = await fetch('/api');
+        const data1 = await response1.json();
+        setUserData(data1);
+        console.log(data1)
+
       } catch(error) {
         console.error('Error fetching data:', error);
       }
-    }    
+    }      
     fetchData();
+   
   },[])
 
   return (
     <div>
-      {backendData.username? (
+      {userData.username? (
         <div>
-          Welcome {backendData.username}!
+          Welcome {userData.username}!
           <button> <a href="/api/logout">Log-out</a></button>
+          <form method="POST" action = "/api/messages">
+            <input type="text" name="comment"></input>
+            <button>Comment</button>
+          </form>
         </div>
       ): (
-        <h1> Please Log-in</h1>
+        <h1> please log-in to send messages</h1>
       )}
+        <div>
+          {messageData.map((message,index)=> (
+            <div key = {index}>
+              <div>{message.message}</div>
+              <div>{message.date}</div>
+              <div>{message.username}</div>
+            </div>
+          ))}
+        </div>
 
-      <form method="POST" action="/api/user/log-in">
-      <label htmlFor="username">Username:</label>
-          <input type="text" id="username" name="username" />
 
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" name="password" />
-          <button onClick ={()=> setCount((prev)=> prev+1)}>Submit</button>
-      </form>
     </div>
   )
 }

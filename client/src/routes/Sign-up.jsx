@@ -6,7 +6,7 @@ function SignUp() {
     <div>
  
       <h1>sign up</h1>
-      <form method="POST" action="http://localhost:8080/api">
+      <form method="POST" action="/api">
       <label htmlFor="username">Username:</label>
           <input type="text" id="username" name="username" />
 
