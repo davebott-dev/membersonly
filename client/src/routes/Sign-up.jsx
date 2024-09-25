@@ -5,13 +5,17 @@ function SignUp() {
   return (
     <div>
  
-      <h1>sign up</h1>
+      <h1>Sign up</h1>
       <form method="POST" action="/api">
-      <label htmlFor="username">Username:</label>
-          <input type="text" id="username" name="username" />
+          <div>
+            <label htmlFor="username">Username:</label>
+            <input type="text" id="username" name="username" />
+          </div>
 
-          <label htmlFor="password">Password:</label>
-          <input type="password" id="password" name="password" />
+          <div>
+            <label htmlFor="password">Password:</label>
+            <input type="password" id="password" name="password" />
+          </div>
           <button>Submit</button>
       </form>
     </div>

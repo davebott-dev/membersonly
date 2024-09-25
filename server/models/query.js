@@ -30,3 +30,11 @@ exports.insertMessage = async (message,date,id) => {
         `,[message,date,id]
     );
 }
+exports.deleteMessage = async (id) => {
+    await pool.query(
+        `
+        DELETE FROM messages
+        WHERE id = $1;
+        `,[id]
+    )
+}

@@ -48,5 +48,10 @@ module.exports = {
         const userId = req.user.id;
         await db.insertMessage(message,date,userId);
         res.redirect('http://localhost:5173');
+    },
+    deletePost: async(req,res) => {
+        const id = req.params.id;
+        await db.deleteMessage(id);
+        res.redirect('http://localhost:5173');
     }
 }

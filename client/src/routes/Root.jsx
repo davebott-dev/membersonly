@@ -1,5 +1,6 @@
 import {Link, Outlet} from 'react-router-dom';
 import {useState} from 'react';
+import {Github} from 'lucide-react'
 import '../App.css'
 
 const Root = () => {
@@ -9,7 +10,7 @@ const Root = () => {
     <>
         <nav>
         <div>
-            <Link to= '/'><strong>MembersOnly Messaging App</strong></Link>
+            <Link to= '/'>MembersOnly Messaging App</Link>
         </div>
 
         <div>
@@ -20,6 +21,13 @@ const Root = () => {
         </nav>
        
         <Outlet context={[setCount]}/>
+
+
+        <footer>
+            <a href="https://github.com/davebott-dev">
+                <Github className= "githubIcon"/>
+            </a>
+        </footer>
     </>
     )
 

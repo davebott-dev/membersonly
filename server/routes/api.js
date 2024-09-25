@@ -55,6 +55,7 @@ router.get('/',controller.get);
 router.post('/',controller.insertUser);
 router.get('/messages',controller.getMessages);
 router.post('/messages',controller.postMessage);
+router.post('/delete/:id',controller.deletePost);
 router.post(
     '/user/log-in',
     passport.authenticate("local", {
