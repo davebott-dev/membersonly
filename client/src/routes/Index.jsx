@@ -3,40 +3,50 @@ import { useOutletContext } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
 import "../App.css";
 
-//make the footer stick to bottom of the page
 function Index() {
   const [userData, setUserData] = useState([]);
   const [messageData, setMessageData] = useState([]);
   const [action, setAction] = useState("/api/delete/");
-  const [pageCount, setPageCount] = useState(0);
-  const [itemOffset, setItemOffset] = useState(0)
-  const [setCount] = useOutletContext();
-  const itemsPerPage =10;
+  const [currentPage, setCurrentPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0)
+  const [isLoading, setIsLoading]= useState(false);
+  const [setUserCount,setTotalCount] = useOutletContext();
+  const itemsPerPage =5;
+  
 
   useEffect(() => {
-    const endOffset = itemOffset+itemsPerPage;
     const fetchData = async () => {
+      setIsLoading(true);
       try {
         const response2 = await fetch("/api/messages");
         const data2 = await response2.json();
-        setMessageData(data2);
         console.log(data2);
+        setTotalPages(Math.ceil(data2.length/itemsPerPage));
+
+        const startIndex = currentPage*itemsPerPage;
+        const endIndex = startIndex + itemsPerPage;
+        const subset = data2.slice(startIndex,endIndex);
+        setMessageData(subset);
 
         const response1 = await fetch("/api");
         const data1 = await response1.json();
         setUserData(data1);
-        setPageCount(pageCount);
         console.log(data1);
+
+        let filter = data2.filter((element)=>element.username==data1.username);
+        setUserCount(filter.length)
+        setTotalCount(data2.length)
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-    fetchData();
-  }, [itemOffset,itemsPerPage]);
+      fetchData();
+      
+      setIsLoading(false);
+  },  [currentPage]);
 
-  const handlePageClick = (e) => {
-    const newOffset = (e.selected*itemsPerPage) % messageData.length;
-    setItemOffset(newOffset);
+  const handlePageClick = (selectedPage) => {
+    setCurrentPage(selectedPage.selected);
   }
 
   return (
@@ -60,12 +70,13 @@ function Index() {
       ) : (
         <h1 className="warning"> Users must be logged in to send messages</h1>
       )}
+      {isLoading? (<p>loading...please wait</p>):(null)}
+
       <div className="gridCont">
         {messageData.map((message, index) => {
           const handleActionChange = () => {
             setAction("/api/delete/" + message.id);
-          };
-
+          };          
           return (
             <div key={index} className="card">
               <div>{message.message}</div>
@@ -89,10 +100,11 @@ function Index() {
         nextLabel = {"Next >"}
         breakLabel = {"..."}
         breakClassName = {"break-me"}
+        pageCount={totalPages}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
-        pageCount={pageCount}
         onPageChange ={handlePageClick}
+        forcePage={currentPage}
         renderOnZeroPageCount = {null}
         containerClassName={"pagination"}
         activeClassName={"active"}
