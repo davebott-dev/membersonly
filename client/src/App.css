@@ -30,7 +30,7 @@ nav {
 nav>div:first-child{
   font-size: larger;
   font-weight: bolder;
-  color: var(--darkColor);
+  color: #6366f1;
 }
 
 nav>div+div{

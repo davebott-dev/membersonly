@@ -43,6 +43,7 @@ module.exports = {
             month:"short",
             day:"numeric",
             year:"numeric",
+        }) + " "+ new Date().toLocaleTimeString("en-US", {
             hour12:true,
         });
         const userId = req.user.id;
