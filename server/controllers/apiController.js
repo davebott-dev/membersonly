@@ -1,5 +1,6 @@
 const db = require('../models/query');
 const bcrypt = require('bcryptjs');
+const {body,validationResult} = require('express-validator');
 
 module.exports = {
     get: async(req,res) => {
@@ -9,7 +10,15 @@ module.exports = {
     insertUser: async(req,res,next) => {
         const username = req.body.username;
         const password = req.body.password;
-
+        [
+            body('username').notEmpty(),
+            body('password').notEmpty(),
+        ]
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            return res.status(400).json({errors:errors.arr()})
+        }
+        
         bcrypt.hash(password,10,async(err,hashedPassword)=> {
             if(err) {
                 console.log(err);
